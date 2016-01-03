@@ -2,7 +2,10 @@ import os
 
 from twisted.application.service import Application
 
-from twisted.application.internet import TCPServer
+from twisted.application.internet import (
+    TCPServer,
+    SSLServer
+)
 
 from twisted.python.filepath import FilePath
 
@@ -10,11 +13,39 @@ from twisted.web.server import Site
 from twisted.web.static import File
 from twisted.web.resource import Resource
 from twisted.web._responses import NOT_FOUND
+from twisted.web.util import redirectTo
 
+import pem
 
+# the actual html/css/js... files being served are all located here
 DOCUMENTS = FilePath(__file__).parent().child("public")
 ERROR_RESOURCE = DOCUMENTS.child("error").child("index.html")
-LISTEN_ON = os.environ.get("PORT")
+
+SECURE_PORT = 443
+PRIVATE_KEY = FilePath(os.environ.get("PRIVATE_KEY")).path
+CERTIFICATE_CHAIN = FilePath(os.environ.get("CERTIFICATE_CHAIN")).path
+DH_PARAMETER = FilePath.Path(os.environ.get("DH_PARAMETER"))
+
+dhParamPath = FilePath(DH_PARAMETER)
+ctxFactory = pem.certificateOptionsFromFiles(
+    PRIVATE_KEY,
+    CERTIFICATE_CHAIN,
+    dhParameters=pem.DiffieHellmanParameters.fromFile(dhParamPath)
+)
+
+
+class RedirectResource(Resource):
+    isLeaf = True
+
+    def render(self, request):
+        host = request.requestHeaders.getRawHeaders('host')[0].split(':', 1)[0]
+        port = ''
+        if SECURE_PORT is not None:
+            port = ':{0}'.format(SECURE_PORT)
+        return redirectTo(
+            'https://{0}{1}{2}'.format(host, port, request.uri),
+            request
+        )
 
 
 class HSTSResource(Resource):
@@ -59,13 +90,19 @@ class NoResource(ErrorResource):
 
 application = Application("static-server")
 
+plainSite = Site(RedirectResource())
+plainSite.displayTracebacks = False
+plainService6 = TCPServer(80, plainSite, interface='::')
+plainService6.setServiceParent(application)
+
 files = File(DOCUMENTS.path)
 files.childNotFound = NoResource()
 
-slightlyBetterSite = Site(HSTSResource(files))
-slightlyBetterSite.displayTracebacks = False
-slightlyBetterService6 = TCPServer(
-    LISTEN_ON,
-    slightlyBetterSite,
-    interface='::')
-slightlyBetterService6.setServiceParent(application)
+secureSite = Site(HSTSResource(files))
+secureSite.displayTracebacks = False
+secureService6 = SSLServer(SECURE_PORT,
+                           secureSite,
+                           ctxFactory,
+                           interface='::')
+
+secureService6.setServiceParent(application)
