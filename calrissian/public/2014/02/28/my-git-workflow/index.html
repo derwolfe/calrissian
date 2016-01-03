@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
+<head>
+
+  <!-- Basic Page Needs
+       ================================================== -->
+  <meta charset="utf-8">
+  <meta name="description" content="derwolfe.net blog">
+  <meta name="author" content="chris wolfe">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <!-- Mobile Specific Metas
+       ================================================== -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- CSS
+       ================================================== -->
+  <link rel="stylesheet" href="/assets/css/derwolfe.css">
+  <link rel="stylesheet" href="/assets/css/hint.min.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+      <![endif]-->
+
+  <!-- fonts -->
+  <link href='https://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,800,700,600,300' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Roboto+Slab:400,300,100,700' rel='stylesheet' type='text/css'>
+
+  <!-- Favicons
+       ================================================== -->
+  <!-- <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon"> -->
+
+
+  <link rel="alternate" href="/feed.xml" type="application/atom+xml">
+  <title>Chris Wolfe</title>
+
+  <!-- analytics -->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-41763159-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <!-- end analytics -->
+</head>
+
+<body>
+  <div id="main">
+    <section id="nav">
+      <nav>
+	<ul>
+	  <li>
+            <a class="button hint--bottom" title="Articles" data-hint="All Articles" href="/">
+              <i class="fa fa-align-justify"></i>
+            </a>
+          </li>
+          <li>
+            <a class="button hint--bottom" title="Github" data-hint="My Github" href="https://github.com/derwolfe">
+              <i class="fa fa-github-square"></i>
+            </a>
+          </li>
+	  <li>
+            <a class="button hint--bottom" title="Feed" data-hint="RSS feed" href="/feed.xml">
+              <i class="fa fa-rss"></i>
+            </a>
+          </li>
+	</ul>
+      </nav>
+    </section>
+
+    <section id="logo">
+      <p>Hi, I'm Chris</p>
+    </section>
+
+    <section>
+      
+<article class="type-system-slab">
+  <header>
+    <h1>My git workflow - updated March 6, 2015</h1>
+    <p>From February 28, 2014</p>
+  </header>
+  <div><h1>git is excellent. It keeps me sane.</h1>
+<p>Over the past years, I&rsquo;ve noticed that not all uses of git are
+alike. There seems to be a definite correct way to use git that results
+in a repository being easy to understand and navigate.</p>
+
+<p>Personally, I want my repositories to read like a story. I want to be
+able to look over a commit history and understand why code was merged
+instead of just when it was merged.</p>
+<h1>1. Use feature branches all the time</h1>
+<p>Branching in git is cheap, easy, fun, and safe. It allows a software
+developer to create a sandbox in which all experimental changes can be
+safely tried.</p>
+
+<p>While working in an experimental branch, one can branch into even
+further experimental sub-branches. Think master -&gt; feature -&gt;
+sub-feature -&gt; implementation_test1.</p>
+
+<p>By doing this, the amount of changes in each feature branch is
+small. Each branch operates as its own contextual unit. I
+like to apply this idea of local context in how I name branches, e.g.,
+<strong>add_transfer_status</strong> or <strong>validate_position_entry</strong>. Having a
+branch name with a specific purpose seems to help reign in
+do-all/fix-all type branches. It seems to at least make the developer
+cognizant of the fact that the current branch has a <em>specific</em> purpose.</p>
+<h1>2.Preserve all history when merging feature branches</h1>
+<p><em>Updated March 6, 2014</em></p>
+
+<p>I no longer believe that squashing or rebasing is the correct
+strategy to use when mergining in new code.</p>
+
+<p>Even though your history might contain a large number
+of warts, it is a representation of facts that represent the history of a
+features development over time. While <code>oops</code> commits might produce noise,
+they help provide valuable knowledge about its development history. The
+developer may have needed to go through a fair amount of experimentation to
+produce the resulting feature. This experimentation may provide future
+developers with helpful information about what to try and what to avoid.
+Further, If a feature has long development history, it can
+signal that there was great difficulty in developing the feature or working
+with an API.</p>
+
+<p>By keeping the dirty, ugly history intact, developers new to your source
+have an accurate historical context through which they can view
+your code.</p>
+
+<p>Rebasing and squashing rewrites (read deletes) the history of development.
+When a repository uses a squashing as the merge strategy, the granularity
+is intentionally limited to the feature itself instead of to the work involved
+in developing the feature.</p>
+
+<p>In closing: use merge commits to describe why of a set of commits is important
+and leave the history of your branch alone. If you did the work, it
+should stay in the repository.</p>
+<h1>3. Newly merged feature branches require tests</h1>
+<p>This is not really git related, but bears mentioning. Writing a new
+feature should result in the ability to write or improve on the current
+battery of tests. There are occasions where new features can result in
+no tests, but most of the time a change in functionality should be
+testable. Doing so makes it easy to check for regressions and
+helps other developers see how the newly written code should be used.</p>
+<h1>4. Use tags</h1>
+<p>git tags provide the ability to highlight certain commits as having
+significance. Typically, I only tag my master branch with version
+releases, e.g. 1.2.</p>
+
+<p>This makes it easy for other users of the repository to track down
+significant changes.</p>
+<h1>5. Once merged, delete feature branches</h1>
+<p>Now that you have merged the branch and with it written a
+highly descriptive commit message, the commit history saved in the
+feature branch no longer serves any purpose. All it can do at this point
+is pollute your workspace with old branch names and cause confusion
+while working on new features.</p>
+
+<p>The solution: delete the feature branch once merged.</p>
+
+<p>There are multiple ways to delete remote branches and tags. I use:</p>
+<div class="code"><div><div class="highlight"><pre><span class="gp">#</span> delete remote tags
+<span class="go">git push origin :refs/tags/&lt;tag-name&gt;</span>
+
+<span class="gp">#</span> delete remote branches
+<span class="go">git push origin :&lt;feature-branch&gt;</span>
+</pre></div>
+</div></div>
+<p>To delete from the local repository after the merge:</p>
+<div class="code"><div><div class="highlight"><pre><span class="go">git branch -D &lt;feature-branch&gt;</span>
+</pre></div>
+</div></div></div>
+</article>
+
+    </section>
+  </div>
+  <footer class="footer" role="contentinfo">
+    <p>&copy; Chris Wolfe</p>
+    <p>Powered by <a href="https://github.com/Anomareh/mynt">Mynt</a>, <a href="http://bourbon.io">Bourbon</a>, and <a href="https://fortawesome.github.io/Font-Awesome/">Font Awesome</a></p>
+  </footer>
+
+</body>
+</html>

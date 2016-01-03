@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
+<head>
+
+  <!-- Basic Page Needs
+       ================================================== -->
+  <meta charset="utf-8">
+  <meta name="description" content="derwolfe.net blog">
+  <meta name="author" content="chris wolfe">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <!-- Mobile Specific Metas
+       ================================================== -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- CSS
+       ================================================== -->
+  <link rel="stylesheet" href="/assets/css/derwolfe.css">
+  <link rel="stylesheet" href="/assets/css/hint.min.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+      <![endif]-->
+
+  <!-- fonts -->
+  <link href='https://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,800,700,600,300' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Roboto+Slab:400,300,100,700' rel='stylesheet' type='text/css'>
+
+  <!-- Favicons
+       ================================================== -->
+  <!-- <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon"> -->
+
+
+  <link rel="alternate" href="/feed.xml" type="application/atom+xml">
+  <title>Chris Wolfe</title>
+
+  <!-- analytics -->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-41763159-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <!-- end analytics -->
+</head>
+
+<body>
+  <div id="main">
+    <section id="nav">
+      <nav>
+	<ul>
+	  <li>
+            <a class="button hint--bottom" title="Articles" data-hint="All Articles" href="/">
+              <i class="fa fa-align-justify"></i>
+            </a>
+          </li>
+          <li>
+            <a class="button hint--bottom" title="Github" data-hint="My Github" href="https://github.com/derwolfe">
+              <i class="fa fa-github-square"></i>
+            </a>
+          </li>
+	  <li>
+            <a class="button hint--bottom" title="Feed" data-hint="RSS feed" href="/feed.xml">
+              <i class="fa fa-rss"></i>
+            </a>
+          </li>
+	</ul>
+      </nav>
+    </section>
+
+    <section id="logo">
+      <p>Hi, I'm Chris</p>
+    </section>
+
+    <section>
+      
+<article class="type-system-slab">
+  <header>
+    <h1>Easy Twisted development with virtualenv and pyenv</h1>
+    <p>From October 19, 2014</p>
+  </header>
+  <div><p>This is meant as a how-to for programmers
+interested in developing the <a href="https://www.twistedmatrix.com">Twisted networking
+library</a> using virtualenvs. I&rsquo;m assuming
+you&rsquo;re working from a linux/unix based development environment. At a
+later date, I&rsquo;ll see if the same setup can be used on windows.</p>
+<h1>The goal</h1>
+<p>Create isolated development environments that target different
+interpreters and require different dependencies.</p>
+<h1>The problem</h1>
+<p>When using python to develop a project, it is very easy to accidentally
+install packages that can be found by your system python. This is a
+problem because it makes it difficult to isolate dependencies on a per
+project basis. A better approach is to create isolated environments in
+which dependencies can be installed.</p>
+
+<p><a href="https://virtualenv.pypa.io/en/latest/virtualenv.html">Virtualenv</a> is a
+tool that creates isolated python environments. When using a virtualenv,
+pip installs dependencies into a location that is only visible to the
+virtualenv. Virtualenvs are wonderful because you can test out different
+versions of libraries without worring about accidentally upgrading a
+dependency that would affect another project.</p>
+
+<p>With python 2, one needed to install the virtualenv application to be
+able to use it, in python3 it is baked in to the standard installation.
+However, the method I&rsquo;m suggesting you use doesn&rsquo;t require you to
+install virtualenv yourself.</p>
+
+<p>By default, virtualenv is setup to target a specific python interpreter,
+normally the one that is available in your <code>$PATH</code> environment variable.
+This means that whatever python is in your path, is the python that will
+be used when creating your virtualenv. While this is helpful, it only
+solves the problem of being able to install dependencies in an isolated
+environment. It doesn&rsquo;t solve the problem of a user wanting to target a
+different interpreter that is installed on the host system. This is
+where pyenv comes in.</p>
+<h1>Pyenv</h1>
+<p><a href="https://github.com/yyuu/pyenv">Pyenv</a> manages the installation and
+removal of python interpreters. Instead of needing to manually
+manipulate your \$PATH to switch to a different interpreter, pyenv
+allows you to specify which python you would like to use. For example,
+to find and install pypy (with pyenv installed) you only need to type
+the following:</p>
+<div class="code"><div><div class="highlight"><pre># displays a list of python version names
+$ pyenv install -l | grep pypy
+
+# select the pypy version you&#39;d like to install
+$ pyenv install pypy-2.4.0
+</pre></div>
+</div></div>
+<p>Once this command completes, pypy-2.4.0 will be installed. You can
+access a new pypy shell by typing</p>
+<div class="code"><div><div class="highlight"><pre><span class="gp">$</span> pyenv shell pypy-2.4.0
+</pre></div>
+</div></div>
+<p>This is an improvement as you no longer have to manually manipulate your
+path in order to switch versions. But, if you are not careful, you can
+still relatively easily install what would be system level dependencies.
+(By this I mean, you can still install a package at the pypy-2.4.0
+env-level). Luckily, there is a tool that makes it easy to create
+virtualenvs using your pyenvs.</p>
+<h1>Pyenv-virtualenv</h1>
+<p><a href="https://github.com/yyuu/pyenv-virtualenv">Pyenv-virtualenv</a> allows you
+to create a virtualenv that will use a specific interpreter.</p>
+<div class="code"><div><div class="highlight"><pre><span class="gp">$</span> pyenv virtualenv 2.7.8 twisted278
+</pre></div>
+</div></div>
+<p>The command creates a new virtualenv named <code>twisted278</code> which uses the
+the <code>python 2.7.8</code> interpreter. If you wanted to create a new virtualenv
+for python 3, without having python 3 installed, you would do the
+following.</p>
+<div class="code"><div><div class="highlight"><pre><span class="gp">#</span> find the python version you<span class="err">&#39;</span>d like to install
+<span class="gp">$</span> pyenv install -l
+
+<span class="gp">#</span> 3.3.5 looks right, install it
+<span class="gp">$</span> pyenv install 3.3.5
+
+<span class="gp">#</span> make a new virtualenv
+<span class="gp">$</span> pyenv virtualenv 3.3.5 twisted336
+</pre></div>
+</div></div>
+<p>Note, it isn&rsquo;t required to append the name of your interpreter to the
+virtualenv. I use this convention to make it easy to see which
+interpreter I&rsquo;m actually targeting.</p>
+<h1>Twisted relevancy</h1>
+<p>As part of the <a href="https://twistedmatrix.com/trac/wiki/Plan/Python%203">Twisted porting
+process</a>, all
+Twisted code must be verified to work on python 2.6, python 2.7, and
+python 3.3. Using pyenv and virtualenv you can create a set of
+environments from which all of the tests can be run.</p>
+
+<p>If you are using a mac and have homebrew installed, installing pyenv and
+pyenv-virtualenv is extremely easy, simply do</p>
+<div class="code"><div><div class="highlight"><pre><span class="gp">$</span> brew install pyenv pyenv-virtualenv
+</pre></div>
+</div></div>
+<p>If you are using linux, you should follow the directions specified on
+the <a href="https://github.com/yyuu/pyenv#installation">project website</a>.</p>
+
+<p>As of right now, you should install python interpreters 2.6.9, 2.7.8 and
+3.3.5. This can be done with the following command</p>
+<div class="code"><div><div class="highlight"><pre><span class="gp">$</span> pyenv install 2.6.9 2.7.8 3.3.5
+</pre></div>
+</div></div>
+<p>Once these have installed successfully, you can create the virtualenvs
+using the following commands. It does not matter in what directory these
+commands are executed.</p>
+<div class="code"><div><div class="highlight"><pre><span class="gp">$</span> pyenv virtualenv 2.6.9 twisted269
+<span class="gp">$</span> pyenv virtualenv 2.7.8 twisted278
+<span class="gp">$</span> pyenv virtualenv 3.3.5 twisted335
+</pre></div>
+</div></div>
+<p>This will create three new virtualenvs inside of ~/.pyenv/versions</p>
+
+<p>Navigate to where ever your Twisted repository is stored, mine, for
+example, is stored in ~/Code/twisted. If you are using bash or zsh, you
+can run the activate script for each of the environments using the
+following command</p>
+<div class="code"><div><div class="highlight"><pre><span class="gp">$</span> <span class="nb">source</span> ~/.pyenv/versions/twisted269/bin/activate
+</pre></div>
+</div></div>
+<p>Once you&rsquo;ve activated the virtualenv, you can verify which interpreter
+is targeting using the following.</p>
+<div class="code"><div><div class="highlight"><pre><span class="gp">(twisted269)$</span> python -v
+<span class="go">Python 2.6.9</span>
+<span class="gp">(twisted269)$</span> which python
+<span class="go">/Users/chris/.pyenv/versions/twisted269/bin/python</span>
+</pre></div>
+</div></div>
+<p>Once the virtualenvs have been created, you can begin installing any
+dependencies you might need. At a bare minimum, Twisted&rsquo;s test suite
+requires zope.interface to be installed. This will need to be installed
+in each of the virtualenvs in which you would like to run tests. I
+handle this, by creating a requirements.txt file and filling it with the
+dependencies I want to install in each virtualenv.</p>
+<div class="code"><div><div class="highlight"><pre>$ cd ~/Code/twisted
+$ echo &quot;zope.interface&quot; &gt; requirements.txt
+$ pip install -r requirements.txt
+</pre></div>
+</div></div>
+<p><strong>Shameless plug</strong> - <del>if you&rsquo;d like Twisted to use the extra_requires
+syntax available from setuptools to install optional dependencies, you
+could review <a href="https://twistedmatrix.com/trac/ticket/3696">ticket #3696</a>!</del>
+It was merged in Twisted 15.1. Yay!</p>
+
+<p>To install the dependencies listed in the requirements.txt file, execute
+the following commands in each virtualenv.</p>
+<div class="code"><div><div class="highlight"><pre><span class="gp">$</span> <span class="nb">cd</span> ~/Code/twisted
+<span class="gp">$</span> <span class="nb">echo</span> <span class="s2">&quot;zope.interface&quot;</span> &gt; requirements.txt
+
+<span class="gp">#</span> install zope.interface into the twisted269 virtualenv
+<span class="gp">$</span> <span class="nb">source</span> ~/.pyenv/versions/twisted269/bin/activate
+<span class="gp">(twisted269)$</span> pip install -r requirements.txt
+<span class="gp">(twisted269)$</span> deactivate
+
+<span class="gp">#</span> install zope.interface into the twisted278 virtualenv
+<span class="gp">$</span> <span class="nb">source</span> ~/.pyenv/versions/twisted278/bin/activate
+<span class="gp">(twisted278)$</span> pip install -r requirements.txt
+<span class="gp">(twisted278)$</span> deactivate
+
+<span class="gp">#</span> install zope.interface into the twisted335 virtualenv
+<span class="gp">$</span> <span class="nb">source</span> ~/.pyenv/versions/twisted335/bin/activate
+<span class="gp">(twisted335)$</span> pip3 install -r requirements.txt
+<span class="gp">(twisted335)$</span> deactivate
+</pre></div>
+</div></div>
+<p>The benefit of having created each of these virtualenvs, is that you may
+now run the test suite for each of the different interpreters. My
+typical workflow is to have several terminal windows open, each using a
+different virtualenv/pyenv combination. This way, if I make a change to
+the source, I can run the tests for each interpreter one by one, without
+having to constantly activate and deactivate virtualenvs.</p>
+
+<p>To run the tests for python 2, you just enter the following</p>
+<div class="code"><div><div class="highlight"><pre><span class="gp">$</span> <span class="nb">source</span> ~/.pyenv/versions/twisted269/bin/activate
+<span class="gp">(twisted269)$</span> <span class="nb">cd</span> ~/Code/twisted
+<span class="gp">(twisted269)$</span> ./bin/trial twisted
+</pre></div>
+</div></div>
+<p>The same goes for python 2.7.8.</p>
+
+<p>For python3, the tests are run using a small utility script saved inside
+of twisted/admin.</p>
+<div class="code"><div><div class="highlight"><pre><span class="gp">$</span> <span class="nb">source</span> ~/.pyenv/versions/twisted335/bin/activate
+<span class="gp">(twisted335)$</span> <span class="nb">cd</span> ~/Code/twisted
+<span class="gp">(twisted335)$</span> ./admin/run-python 3-tests
+</pre></div>
+</div></div><h1>Issues</h1>
+<p>If you haven&rsquo;t already noticed, the code to activate a virtualenv is
+pretty verbose. I
+<a href="http://virtualenvwrapper.readthedocs.org/en/latest/">Virtualenv-wrapper</a>
+project can be used to simplify activating virtualenvs. I use the fish
+shell and have defined a function to activate virtualenvs. The sad part
+about the fish function is that is it only works with pyenvs that
+provide an activate.fish command. Here is the code:</p>
+<div class="code"><div><div class="highlight"><pre><span class="go">function actenv --description &#39;activate the virtualenv with the given name&#39;</span>
+<span class="go">   . ~/.pyenv/versions/$argv/bin/activate.fish</span>
+<span class="go">end</span>
+</pre></div>
+</div></div><h1>Finishing up</h1>
+<p>If you have gotten this far and followed the examples, you should have
+been able to create new virtualenvs that are pinned to specific
+interpreters. You should also have been able to run tests for twisted
+using these virtualenvs.</p>
+</div>
+</article>
+
+    </section>
+  </div>
+  <footer class="footer" role="contentinfo">
+    <p>&copy; Chris Wolfe</p>
+    <p>Powered by <a href="https://github.com/Anomareh/mynt">Mynt</a>, <a href="http://bourbon.io">Bourbon</a>, and <a href="https://fortawesome.github.io/Font-Awesome/">Font Awesome</a></p>
+  </footer>
+
+</body>
+</html>

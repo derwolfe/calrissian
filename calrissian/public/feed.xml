@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>Chris Wolfe</title>
+    
+    <link rel="alternate" href="http://derwolfe.net/" />
+    <link rel="self" href="http://derwolfe.net/feed.xml" type="application/atom+xml" />
+    <id>http://derwolfe.net/</id>
+    <updated>2015-12-30T16:17:59Z</updated>
+    
+    <author>
+        <name>Chris Wolfe</name>
+        <email>chris@derwolfe.net</email>
+        <uri>http://derwolfe.net/</uri>
+    </author>
+    
+    
+        <entry>
+            <title>Easy Twisted development with virtualenv and pyenv</title>
+            <link rel="alternate" href="http://derwolfe.net/2014/10/19/twisted-pyenv-virtualenv/" type="text/html" />
+            <id>http://derwolfe.net/2014/10/19/twisted-pyenv-virtualenv/</id>
+            <updated>2014-10-19T19:07:00Z</updated>
+            
+            <summary type="html">This is meant as a how-to for programmers
+interested in developing the &lt;a href=&#34;https://www.twistedmatrix.com&#34;&gt;Twisted networking
+library&lt;/a&gt; using virtualenvs. I&amp;rsquo;m assuming
+you&amp;rsquo;re working from a linux/unix based development environment. At a
+later date, I&amp;rsquo;ll see if the same setup can be used on windows.</summary>
+            <content type="html">&lt;p&gt;This is meant as a how-to for programmers
+interested in developing the &lt;a href=&#34;https://www.twistedmatrix.com&#34;&gt;Twisted networking
+library&lt;/a&gt; using virtualenvs. I&amp;rsquo;m assuming
+you&amp;rsquo;re working from a linux/unix based development environment. At a
+later date, I&amp;rsquo;ll see if the same setup can be used on windows.&lt;/p&gt;
+&lt;h1&gt;The goal&lt;/h1&gt;
+&lt;p&gt;Create isolated development environments that target different
+interpreters and require different dependencies.&lt;/p&gt;
+&lt;h1&gt;The problem&lt;/h1&gt;
+&lt;p&gt;When using python to develop a project, it is very easy to accidentally
+install packages that can be found by your system python. This is a
+problem because it makes it difficult to isolate dependencies on a per
+project basis. A better approach is to create isolated environments in
+which dependencies can be installed.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://virtualenv.pypa.io/en/latest/virtualenv.html&#34;&gt;Virtualenv&lt;/a&gt; is a
+tool that creates isolated python environments. When using a virtualenv,
+pip installs dependencies into a location that is only visible to the
+virtualenv. Virtualenvs are wonderful because you can test out different
+versions of libraries without worring about accidentally upgrading a
+dependency that would affect another project.&lt;/p&gt;
+
+&lt;p&gt;With python 2, one needed to install the virtualenv application to be
+able to use it, in python3 it is baked in to the standard installation.
+However, the method I&amp;rsquo;m suggesting you use doesn&amp;rsquo;t require you to
+install virtualenv yourself.&lt;/p&gt;
+
+&lt;p&gt;By default, virtualenv is setup to target a specific python interpreter,
+normally the one that is available in your &lt;code&gt;$PATH&lt;/code&gt; environment variable.
+This means that whatever python is in your path, is the python that will
+be used when creating your virtualenv. While this is helpful, it only
+solves the problem of being able to install dependencies in an isolated
+environment. It doesn&amp;rsquo;t solve the problem of a user wanting to target a
+different interpreter that is installed on the host system. This is
+where pyenv comes in.&lt;/p&gt;
+&lt;h1&gt;Pyenv&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/yyuu/pyenv&#34;&gt;Pyenv&lt;/a&gt; manages the installation and
+removal of python interpreters. Instead of needing to manually
+manipulate your \$PATH to switch to a different interpreter, pyenv
+allows you to specify which python you would like to use. For example,
+to find and install pypy (with pyenv installed) you only need to type
+the following:&lt;/p&gt;
+&lt;pre&gt;&lt;code data-lang=&#34;{.sourceCode&#34;&gt;# displays a list of python version names
+$ pyenv install -l | grep pypy
+
+# select the pypy version you&amp;#x27;d like to install
+$ pyenv install pypy-2.4.0
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Once this command completes, pypy-2.4.0 will be installed. You can
+access a new pypy shell by typing&lt;/p&gt;
+&lt;pre&gt;&lt;code data-lang=&#34;console&#34;&gt;$ pyenv shell pypy-2.4.0
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This is an improvement as you no longer have to manually manipulate your
+path in order to switch versions. But, if you are not careful, you can
+still relatively easily install what would be system level dependencies.
+(By this I mean, you can still install a package at the pypy-2.4.0
+env-level). Luckily, there is a tool that makes it easy to create
+virtualenvs using your pyenvs.&lt;/p&gt;
+&lt;h1&gt;Pyenv-virtualenv&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/yyuu/pyenv-virtualenv&#34;&gt;Pyenv-virtualenv&lt;/a&gt; allows you
+to create a virtualenv that will use a specific interpreter.&lt;/p&gt;
+&lt;pre&gt;&lt;code data-lang=&#34;console&#34;&gt;$ pyenv virtualenv 2.7.8 twisted278
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The command creates a new virtualenv named &lt;code&gt;twisted278&lt;/code&gt; which uses the
+the &lt;code&gt;python 2.7.8&lt;/code&gt; interpreter. If you wanted to create a new virtualenv
+for python 3, without having python 3 installed, you would do the
+following.&lt;/p&gt;
+&lt;pre&gt;&lt;code data-lang=&#34;console&#34;&gt;# find the python version you&amp;#x27;d like to install
+$ pyenv install -l
+
+# 3.3.5 looks right, install it
+$ pyenv install 3.3.5
+
+# make a new virtualenv
+$ pyenv virtualenv 3.3.5 twisted336
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Note, it isn&amp;rsquo;t required to append the name of your interpreter to the
+virtualenv. I use this convention to make it easy to see which
+interpreter I&amp;rsquo;m actually targeting.&lt;/p&gt;
+&lt;h1&gt;Twisted relevancy&lt;/h1&gt;
+&lt;p&gt;As part of the &lt;a href=&#34;https://twistedmatrix.com/trac/wiki/Plan/Python%203&#34;&gt;Twisted porting
+process&lt;/a&gt;, all
+Twisted code must be verified to work on python 2.6, python 2.7, and
+python 3.3. Using pyenv and virtualenv you can create a set of
+environments from which all of the tests can be run.&lt;/p&gt;
+
+&lt;p&gt;If you are using a mac and have homebrew installed, installing pyenv and
+pyenv-virtualenv is extremely easy, simply do&lt;/p&gt;
+&lt;pre&gt;&lt;code data-lang=&#34;console&#34;&gt;$ brew install pyenv pyenv-virtualenv
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;If you are using linux, you should follow the directions specified on
+the &lt;a href=&#34;https://github.com/yyuu/pyenv#installation&#34;&gt;project website&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;As of right now, you should install python interpreters 2.6.9, 2.7.8 and
+3.3.5. This can be done with the following command&lt;/p&gt;
+&lt;pre&gt;&lt;code data-lang=&#34;console&#34;&gt;$ pyenv install 2.6.9 2.7.8 3.3.5
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Once these have installed successfully, you can create the virtualenvs
+using the following commands. It does not matter in what directory these
+commands are executed.&lt;/p&gt;
+&lt;pre&gt;&lt;code data-lang=&#34;console&#34;&gt;$ pyenv virtualenv 2.6.9 twisted269
+$ pyenv virtualenv 2.7.8 twisted278
+$ pyenv virtualenv 3.3.5 twisted335
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This will create three new virtualenvs inside of ~/.pyenv/versions&lt;/p&gt;
+
+&lt;p&gt;Navigate to where ever your Twisted repository is stored, mine, for
+example, is stored in ~/Code/twisted. If you are using bash or zsh, you
+can run the activate script for each of the environments using the
+following command&lt;/p&gt;
+&lt;pre&gt;&lt;code data-lang=&#34;console&#34;&gt;$ source ~&amp;#x2F;.pyenv&amp;#x2F;versions&amp;#x2F;twisted269&amp;#x2F;bin&amp;#x2F;activate
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Once you&amp;rsquo;ve activated the virtualenv, you can verify which interpreter
+is targeting using the following.&lt;/p&gt;
+&lt;pre&gt;&lt;code data-lang=&#34;console&#34;&gt;(twisted269)$ python -v
+Python 2.6.9
+(twisted269)$ which python
+&amp;#x2F;Users&amp;#x2F;chris&amp;#x2F;.pyenv&amp;#x2F;versions&amp;#x2F;twisted269&amp;#x2F;bin&amp;#x2F;python
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Once the virtualenvs have been created, you can begin installing any
+dependencies you might need. At a bare minimum, Twisted&amp;rsquo;s test suite
+requires zope.interface to be installed. This will need to be installed
+in each of the virtualenvs in which you would like to run tests. I
+handle this, by creating a requirements.txt file and filling it with the
+dependencies I want to install in each virtualenv.&lt;/p&gt;
+&lt;pre&gt;&lt;code data-lang=&#34;{.sourceCode&#34;&gt;$ cd ~&amp;#x2F;Code&amp;#x2F;twisted
+$ echo &amp;quot;zope.interface&amp;quot; &amp;gt; requirements.txt
+$ pip install -r requirements.txt
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;Shameless plug&lt;/strong&gt; - &lt;del&gt;if you&amp;rsquo;d like Twisted to use the extra_requires
+syntax available from setuptools to install optional dependencies, you
+could review &lt;a href=&#34;https://twistedmatrix.com/trac/ticket/3696&#34;&gt;ticket #3696&lt;/a&gt;!&lt;/del&gt;
+It was merged in Twisted 15.1. Yay!&lt;/p&gt;
+
+&lt;p&gt;To install the dependencies listed in the requirements.txt file, execute
+the following commands in each virtualenv.&lt;/p&gt;
+&lt;pre&gt;&lt;code data-lang=&#34;console&#34;&gt;$ cd ~&amp;#x2F;Code&amp;#x2F;twisted
+$ echo &amp;quot;zope.interface&amp;quot; &amp;gt; requirements.txt
+
+# install zope.interface into the twisted269 virtualenv
+$ source ~&amp;#x2F;.pyenv&amp;#x2F;versions&amp;#x2F;twisted269&amp;#x2F;bin&amp;#x2F;activate
+(twisted269)$ pip install -r requirements.txt
+(twisted269)$ deactivate
+
+# install zope.interface into the twisted278 virtualenv
+$ source ~&amp;#x2F;.pyenv&amp;#x2F;versions&amp;#x2F;twisted278&amp;#x2F;bin&amp;#x2F;activate
+(twisted278)$ pip install -r requirements.txt
+(twisted278)$ deactivate
+
+# install zope.interface into the twisted335 virtualenv
+$ source ~&amp;#x2F;.pyenv&amp;#x2F;versions&amp;#x2F;twisted335&amp;#x2F;bin&amp;#x2F;activate
+(twisted335)$ pip3 install -r requirements.txt
+(twisted335)$ deactivate
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The benefit of having created each of these virtualenvs, is that you may
+now run the test suite for each of the different interpreters. My
+typical workflow is to have several terminal windows open, each using a
+different virtualenv/pyenv combination. This way, if I make a change to
+the source, I can run the tests for each interpreter one by one, without
+having to constantly activate and deactivate virtualenvs.&lt;/p&gt;
+
+&lt;p&gt;To run the tests for python 2, you just enter the following&lt;/p&gt;
+&lt;pre&gt;&lt;code data-lang=&#34;console&#34;&gt;$ source ~&amp;#x2F;.pyenv&amp;#x2F;versions&amp;#x2F;twisted269&amp;#x2F;bin&amp;#x2F;activate
+(twisted269)$ cd ~&amp;#x2F;Code&amp;#x2F;twisted
+(twisted269)$ .&amp;#x2F;bin&amp;#x2F;trial twisted
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The same goes for python 2.7.8.&lt;/p&gt;
+
+&lt;p&gt;For python3, the tests are run using a small utility script saved inside
+of twisted/admin.&lt;/p&gt;
+&lt;pre&gt;&lt;code data-lang=&#34;console&#34;&gt;$ source ~&amp;#x2F;.pyenv&amp;#x2F;versions&amp;#x2F;twisted335&amp;#x2F;bin&amp;#x2F;activate
+(twisted335)$ cd ~&amp;#x2F;Code&amp;#x2F;twisted
+(twisted335)$ .&amp;#x2F;admin&amp;#x2F;run-python 3-tests
+&lt;/code&gt;&lt;/pre&gt;&lt;h1&gt;Issues&lt;/h1&gt;
+&lt;p&gt;If you haven&amp;rsquo;t already noticed, the code to activate a virtualenv is
+pretty verbose. I
+&lt;a href=&#34;http://virtualenvwrapper.readthedocs.org/en/latest/&#34;&gt;Virtualenv-wrapper&lt;/a&gt;
+project can be used to simplify activating virtualenvs. I use the fish
+shell and have defined a function to activate virtualenvs. The sad part
+about the fish function is that is it only works with pyenvs that
+provide an activate.fish command. Here is the code:&lt;/p&gt;
+&lt;pre&gt;&lt;code data-lang=&#34;console&#34;&gt;function actenv --description &amp;#x27;activate the virtualenv with the given name&amp;#x27;
+   . ~&amp;#x2F;.pyenv&amp;#x2F;versions&amp;#x2F;$argv&amp;#x2F;bin&amp;#x2F;activate.fish
+end
+&lt;/code&gt;&lt;/pre&gt;&lt;h1&gt;Finishing up&lt;/h1&gt;
+&lt;p&gt;If you have gotten this far and followed the examples, you should have
+been able to create new virtualenvs that are pinned to specific
+interpreters. You should also have been able to run tests for twisted
+using these virtualenvs.&lt;/p&gt;
+</content>
+        </entry>
+    
+        <entry>
+            <title>I love the fish shell</title>
+            <link rel="alternate" href="http://derwolfe.net/2014/10/18/I-love-the-fish-shell/" type="text/html" />
+            <id>http://derwolfe.net/2014/10/18/I-love-the-fish-shell/</id>
+            <updated>2014-10-18T19:07:00Z</updated>
+            
+            <summary type="html">I have been using the fish shell for the past six months and have been
+loving every minute of it. I wanted to tell you about it because it is
+vastly simpler to use than I ever felt both bash and zsh ever were.</summary>
+            <content type="html">&lt;p&gt;I have been using the fish shell for the past six months and have been
+loving every minute of it. I wanted to tell you about it because it is
+vastly simpler to use than I ever felt both bash and zsh ever were.&lt;/p&gt;
+&lt;h1&gt;Why do I use my shell?&lt;/h1&gt;
+&lt;p&gt;I use my shell mostly for day to day programming work. Lots of boring
+directory changes, grepping output, piping commands together, etc. I
+also write a fair amount of python and need to switch between
+virtualenvs frequently.&lt;/p&gt;
+&lt;h1&gt;What do I want?&lt;/h1&gt;
+&lt;p&gt;Autocomplete should work excellently. The shell should feel quick and
+responsive. The default configuration language for my shell should be
+simple and obvious. Global variables should be used sparingly if at all.
+Reading code written for the shell should not make me want to cry.&lt;/p&gt;
+&lt;h1&gt;Why do I like fish?&lt;/h1&gt;
+&lt;p&gt;fish has some excellent defaults that feel natural from the start.&lt;/p&gt;
+
+&lt;p&gt;It has bar none the best tab/auto-completion I have ever used. The
+completions are actively filtered as you type. If the command has a
+description, then fish displays this as well. For example, typing
+&lt;code&gt;brew c&amp;lt;TAB&amp;gt;&lt;/code&gt; produces the following&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://derwolfe.net/assets/images/completion.png&#34; alt=&#34;image&#34;&gt;&lt;/p&gt;
+
+&lt;p&gt;fish also uses a sane and simple configuration language in which paths
+can be set easily. For example, here is my fish.config file in which
+I&amp;rsquo;ve setup pyenv, homebrew and the default paths.&lt;/p&gt;
+&lt;pre&gt;&lt;code data-lang=&#34;console&#34;&gt;set default_path &amp;#x2F;usr&amp;#x2F;bin &amp;#x2F;usr&amp;#x2F;sbin &amp;#x2F;bin &amp;#x2F;sbin
+set homebrew &amp;#x2F;usr&amp;#x2F;local&amp;#x2F;bin &amp;#x2F;usr&amp;#x2F;local&amp;#x2F;sbin
+set brew_pyenv &amp;#x2F;usr&amp;#x2F;local&amp;#x2F;var&amp;#x2F;pyenv&amp;#x2F;shims
+set -gx PATH $homebrew $brew_pyenv $default_path
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;With fish, the convention is only to save functions that will &lt;em&gt;always&lt;/em&gt;
+be evaluated on shell startup in the main config.fish file. All
+functions are defined individually and saved inside of
+~/.config/fish/functions. fish comes with an in-shell editor that makes
+it easy to both create and update functions. &lt;code&gt;funced&lt;/code&gt; is the in-shell
+editor and I have found it to be indespenible. To edit any function
+attached to the fish shell, you just type&lt;/p&gt;
+&lt;pre&gt;&lt;code data-lang=&#34;console&#34;&gt;funced function_name
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This will open up a simple editor allowing you to edit the function in
+place. New functions can be defined using &lt;code&gt;funced&lt;/code&gt; as well. To save a
+function permanently; that is longer than the life of your current
+shell, funcsave needs to be used:&lt;/p&gt;
+&lt;pre&gt;&lt;code data-lang=&#34;console&#34;&gt;funcsave function_name
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This updates the persisted copy of the function or creates a new
+function inside of ~/.config/fish/functions&lt;/p&gt;
+
+&lt;p&gt;Here is a picture of &lt;code&gt;funced&lt;/code&gt; in action.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://derwolfe.net/assets/images/funced.png&#34; alt=&#34;image&#34;&gt;&lt;/p&gt;
+
+&lt;p&gt;In addition to the wonderful handling of user defined functions, the
+prompts included with fish are excellent. By default, fish displays only
+the first letter of each parent directory&amp;rsquo;s name in relation to the
+present working directory, e.g.:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://derwolfe.net/assets/images/prompt.png&#34; alt=&#34;image&#34;&gt;&lt;/p&gt;
+
+&lt;p&gt;The prompt can be edited several ways. The easiest way to edit the
+prompt is to open up the web-based configuration utility. I&amp;rsquo;m normally
+not a fan of using web configurations, bit fish&amp;rsquo;s is simple and
+straigtforward. To access the configuration utility, type&lt;/p&gt;
+&lt;pre&gt;&lt;code data-lang=&#34;console&#34;&gt;fish_config
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This takes you to a page where the prompt can be chosen easily. I just
+use the &lt;strong&gt;classic + git&lt;/strong&gt; option.&lt;/p&gt;
+
+&lt;p&gt;The other way is to edit the prompt directly. This can be done by
+editing the fish_prompt.fish file which is conveniently saved in
+~/.config/fish/functions.&lt;/p&gt;
+&lt;h2&gt;Wrapping up&lt;/h2&gt;
+&lt;p&gt;I love using fish because it doesn&amp;rsquo;t surpise me. It has excellent user
+documentation, makes itpleasent to define new functions, and is
+extremely easy to reconfigure. If you haven&amp;rsquo;t done so yet, I&amp;rsquo;d highly
+recommend giving fish a try; installation directions can be found on the
+&lt;a href=&#34;http://fishshell.com&#34;&gt;fish homepage&lt;/a&gt;.&lt;/p&gt;
+</content>
+        </entry>
+    
+        <entry>
+            <title>My git workflow - updated March 6, 2015</title>
+            <link rel="alternate" href="http://derwolfe.net/2014/02/28/my-git-workflow/" type="text/html" />
+            <id>http://derwolfe.net/2014/02/28/my-git-workflow/</id>
+            <updated>2014-02-28T19:07:00Z</updated>
+            
+            
+            <content type="html">&lt;h1&gt;git is excellent. It keeps me sane.&lt;/h1&gt;
+&lt;p&gt;Over the past years, I&amp;rsquo;ve noticed that not all uses of git are
+alike. There seems to be a definite correct way to use git that results
+in a repository being easy to understand and navigate.&lt;/p&gt;
+
+&lt;p&gt;Personally, I want my repositories to read like a story. I want to be
+able to look over a commit history and understand why code was merged
+instead of just when it was merged.&lt;/p&gt;
+&lt;h1&gt;1. Use feature branches all the time&lt;/h1&gt;
+&lt;p&gt;Branching in git is cheap, easy, fun, and safe. It allows a software
+developer to create a sandbox in which all experimental changes can be
+safely tried.&lt;/p&gt;
+
+&lt;p&gt;While working in an experimental branch, one can branch into even
+further experimental sub-branches. Think master -&amp;gt; feature -&amp;gt;
+sub-feature -&amp;gt; implementation_test1.&lt;/p&gt;
+
+&lt;p&gt;By doing this, the amount of changes in each feature branch is
+small. Each branch operates as its own contextual unit. I
+like to apply this idea of local context in how I name branches, e.g.,
+&lt;strong&gt;add_transfer_status&lt;/strong&gt; or &lt;strong&gt;validate_position_entry&lt;/strong&gt;. Having a
+branch name with a specific purpose seems to help reign in
+do-all/fix-all type branches. It seems to at least make the developer
+cognizant of the fact that the current branch has a &lt;em&gt;specific&lt;/em&gt; purpose.&lt;/p&gt;
+&lt;h1&gt;2.Preserve all history when merging feature branches&lt;/h1&gt;
+&lt;p&gt;&lt;em&gt;Updated March 6, 2014&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;I no longer believe that squashing or rebasing is the correct
+strategy to use when mergining in new code.&lt;/p&gt;
+
+&lt;p&gt;Even though your history might contain a large number
+of warts, it is a representation of facts that represent the history of a
+features development over time. While &lt;code&gt;oops&lt;/code&gt; commits might produce noise,
+they help provide valuable knowledge about its development history. The
+developer may have needed to go through a fair amount of experimentation to
+produce the resulting feature. This experimentation may provide future
+developers with helpful information about what to try and what to avoid.
+Further, If a feature has long development history, it can
+signal that there was great difficulty in developing the feature or working
+with an API.&lt;/p&gt;
+
+&lt;p&gt;By keeping the dirty, ugly history intact, developers new to your source
+have an accurate historical context through which they can view
+your code.&lt;/p&gt;
+
+&lt;p&gt;Rebasing and squashing rewrites (read deletes) the history of development.
+When a repository uses a squashing as the merge strategy, the granularity
+is intentionally limited to the feature itself instead of to the work involved
+in developing the feature.&lt;/p&gt;
+
+&lt;p&gt;In closing: use merge commits to describe why of a set of commits is important
+and leave the history of your branch alone. If you did the work, it
+should stay in the repository.&lt;/p&gt;
+&lt;h1&gt;3. Newly merged feature branches require tests&lt;/h1&gt;
+&lt;p&gt;This is not really git related, but bears mentioning. Writing a new
+feature should result in the ability to write or improve on the current
+battery of tests. There are occasions where new features can result in
+no tests, but most of the time a change in functionality should be
+testable. Doing so makes it easy to check for regressions and
+helps other developers see how the newly written code should be used.&lt;/p&gt;
+&lt;h1&gt;4. Use tags&lt;/h1&gt;
+&lt;p&gt;git tags provide the ability to highlight certain commits as having
+significance. Typically, I only tag my master branch with version
+releases, e.g. 1.2.&lt;/p&gt;
+
+&lt;p&gt;This makes it easy for other users of the repository to track down
+significant changes.&lt;/p&gt;
+&lt;h1&gt;5. Once merged, delete feature branches&lt;/h1&gt;
+&lt;p&gt;Now that you have merged the branch and with it written a
+highly descriptive commit message, the commit history saved in the
+feature branch no longer serves any purpose. All it can do at this point
+is pollute your workspace with old branch names and cause confusion
+while working on new features.&lt;/p&gt;
+
+&lt;p&gt;The solution: delete the feature branch once merged.&lt;/p&gt;
+
+&lt;p&gt;There are multiple ways to delete remote branches and tags. I use:&lt;/p&gt;
+&lt;pre&gt;&lt;code data-lang=&#34;console&#34;&gt;# delete remote tags
+git push origin :refs&amp;#x2F;tags&amp;#x2F;&amp;lt;tag-name&amp;gt;
+
+# delete remote branches
+git push origin :&amp;lt;feature-branch&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;To delete from the local repository after the merge:&lt;/p&gt;
+&lt;pre&gt;&lt;code data-lang=&#34;console&#34;&gt;git branch -D &amp;lt;feature-branch&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;</content>
+        </entry>
+    
+</feed>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
+<head>
+
+  <!-- Basic Page Needs
+       ================================================== -->
+  <meta charset="utf-8">
+  <meta name="description" content="derwolfe.net blog">
+  <meta name="author" content="chris wolfe">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <!-- Mobile Specific Metas
+       ================================================== -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- CSS
+       ================================================== -->
+  <link rel="stylesheet" href="/assets/css/derwolfe.css">
+  <link rel="stylesheet" href="/assets/css/hint.min.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+      <![endif]-->
+
+  <!-- fonts -->
+  <link href='https://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,800,700,600,300' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Roboto+Slab:400,300,100,700' rel='stylesheet' type='text/css'>
+
+  <!-- Favicons
+       ================================================== -->
+  <!-- <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon"> -->
+
+
+  <link rel="alternate" href="/feed.xml" type="application/atom+xml">
+  <title>Chris Wolfe</title>
+
+  <!-- analytics -->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-41763159-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <!-- end analytics -->
+</head>
+
+<body>
+  <div id="main">
+    <section id="nav">
+      <nav>
+	<ul>
+	  <li>
+            <a class="button hint--bottom" title="Articles" data-hint="All Articles" href="/">
+              <i class="fa fa-align-justify"></i>
+            </a>
+          </li>
+          <li>
+            <a class="button hint--bottom" title="Github" data-hint="My Github" href="https://github.com/derwolfe">
+              <i class="fa fa-github-square"></i>
+            </a>
+          </li>
+	  <li>
+            <a class="button hint--bottom" title="Feed" data-hint="RSS feed" href="/feed.xml">
+              <i class="fa fa-rss"></i>
+            </a>
+          </li>
+	</ul>
+      </nav>
+    </section>
+
+    <section id="logo">
+      <p>Hi, I'm Chris</p>
+    </section>
+
+    <section>
+      
+<article class="type-system-slab">
+  <header>
+    <h1>I love the fish shell</h1>
+    <p>From October 18, 2014</p>
+  </header>
+  <div><p>I have been using the fish shell for the past six months and have been
+loving every minute of it. I wanted to tell you about it because it is
+vastly simpler to use than I ever felt both bash and zsh ever were.</p>
+<h1>Why do I use my shell?</h1>
+<p>I use my shell mostly for day to day programming work. Lots of boring
+directory changes, grepping output, piping commands together, etc. I
+also write a fair amount of python and need to switch between
+virtualenvs frequently.</p>
+<h1>What do I want?</h1>
+<p>Autocomplete should work excellently. The shell should feel quick and
+responsive. The default configuration language for my shell should be
+simple and obvious. Global variables should be used sparingly if at all.
+Reading code written for the shell should not make me want to cry.</p>
+<h1>Why do I like fish?</h1>
+<p>fish has some excellent defaults that feel natural from the start.</p>
+
+<p>It has bar none the best tab/auto-completion I have ever used. The
+completions are actively filtered as you type. If the command has a
+description, then fish displays this as well. For example, typing
+<code>brew c&lt;TAB&gt;</code> produces the following</p>
+
+<p><img src="/assets/images/completion.png" alt="image"></p>
+
+<p>fish also uses a sane and simple configuration language in which paths
+can be set easily. For example, here is my fish.config file in which
+I&rsquo;ve setup pyenv, homebrew and the default paths.</p>
+<div class="code"><div><div class="highlight"><pre><span class="go">set default_path /usr/bin /usr/sbin /bin /sbin</span>
+<span class="go">set homebrew /usr/local/bin /usr/local/sbin</span>
+<span class="go">set brew_pyenv /usr/local/var/pyenv/shims</span>
+<span class="go">set -gx PATH $homebrew $brew_pyenv $default_path</span>
+</pre></div>
+</div></div>
+<p>With fish, the convention is only to save functions that will <em>always</em>
+be evaluated on shell startup in the main config.fish file. All
+functions are defined individually and saved inside of
+~/.config/fish/functions. fish comes with an in-shell editor that makes
+it easy to both create and update functions. <code>funced</code> is the in-shell
+editor and I have found it to be indespenible. To edit any function
+attached to the fish shell, you just type</p>
+<div class="code"><div><div class="highlight"><pre><span class="go">funced function_name</span>
+</pre></div>
+</div></div>
+<p>This will open up a simple editor allowing you to edit the function in
+place. New functions can be defined using <code>funced</code> as well. To save a
+function permanently; that is longer than the life of your current
+shell, funcsave needs to be used:</p>
+<div class="code"><div><div class="highlight"><pre><span class="go">funcsave function_name</span>
+</pre></div>
+</div></div>
+<p>This updates the persisted copy of the function or creates a new
+function inside of ~/.config/fish/functions</p>
+
+<p>Here is a picture of <code>funced</code> in action.</p>
+
+<p><img src="/assets/images/funced.png" alt="image"></p>
+
+<p>In addition to the wonderful handling of user defined functions, the
+prompts included with fish are excellent. By default, fish displays only
+the first letter of each parent directory&rsquo;s name in relation to the
+present working directory, e.g.:</p>
+
+<p><img src="/assets/images/prompt.png" alt="image"></p>
+
+<p>The prompt can be edited several ways. The easiest way to edit the
+prompt is to open up the web-based configuration utility. I&rsquo;m normally
+not a fan of using web configurations, bit fish&rsquo;s is simple and
+straigtforward. To access the configuration utility, type</p>
+<div class="code"><div><div class="highlight"><pre><span class="go">fish_config</span>
+</pre></div>
+</div></div>
+<p>This takes you to a page where the prompt can be chosen easily. I just
+use the <strong>classic + git</strong> option.</p>
+
+<p>The other way is to edit the prompt directly. This can be done by
+editing the fish_prompt.fish file which is conveniently saved in
+~/.config/fish/functions.</p>
+<h2>Wrapping up</h2>
+<p>I love using fish because it doesn&rsquo;t surpise me. It has excellent user
+documentation, makes itpleasent to define new functions, and is
+extremely easy to reconfigure. If you haven&rsquo;t done so yet, I&rsquo;d highly
+recommend giving fish a try; installation directions can be found on the
+<a href="http://fishshell.com">fish homepage</a>.</p>
+</div>
+</article>
+
+    </section>
+  </div>
+  <footer class="footer" role="contentinfo">
+    <p>&copy; Chris Wolfe</p>
+    <p>Powered by <a href="https://github.com/Anomareh/mynt">Mynt</a>, <a href="http://bourbon.io">Bourbon</a>, and <a href="https://fortawesome.github.io/Font-Awesome/">Font Awesome</a></p>
+  </footer>
+
+</body>
+</html>
