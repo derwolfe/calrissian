@@ -14,7 +14,7 @@ from twisted.web._responses import NOT_FOUND
 
 DOCUMENTS = FilePath(__file__).parent().child("public")
 ERROR_RESOURCE = DOCUMENTS.child("error").child("index.html")
-LISTEN_ON = os.environ.get("LISTEN_ON")
+LISTEN_ON = os.environ.get("PORT")
 
 
 class HSTSResource(Resource):
