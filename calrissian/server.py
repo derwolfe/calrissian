@@ -21,16 +21,17 @@ import pem
 DOCUMENTS = FilePath(__file__).parent().child("public")
 ERROR_RESOURCE = DOCUMENTS.child("error").child("index.html")
 
-SECURE_PORT = 443
-PRIVATE_KEY = FilePath(os.environ.get("PRIVATE_KEY")).path
-CERTIFICATE_CHAIN = FilePath(os.environ.get("CERTIFICATE_CHAIN")).path
-DH_PARAMETER = FilePath.Path(os.environ.get("DH_PARAMETER"))
+SECURE_PORT = os.environ.get("SECURE_PORT")
 
-dhParamPath = FilePath(DH_PARAMETER)
-ctxFactory = pem.certificateOptionsFromFiles(
-    PRIVATE_KEY,
-    CERTIFICATE_CHAIN,
-    dhParameters=pem.DiffieHellmanParameters.fromFile(dhParamPath)
+# all certificates are passed in as environment variables
+PRIVATE_KEY = os.environ.get("PRIVATE_KEY")
+CERTIFICATE_CHAIN = os.environ.get("CERTIFICATE_CHAIN")
+DH_PARAMETER = os.environ.get("DH_PARAMETER")
+
+ctxFactory = pem.certificateOptionsFromPEMs(
+    pem.parse(PRIVATE_KEY),
+    pem.parse(CERTIFICATE_CHAIN),
+    dhParameters=pem.DiffieHellmanParameters(DH_PARAMETER)
 )
 
 
