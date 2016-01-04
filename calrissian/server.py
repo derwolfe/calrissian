@@ -21,6 +21,7 @@ import pem
 DOCUMENTS = FilePath(__file__).parent().child("public")
 ERROR_RESOURCE = DOCUMENTS.child("error").child("index.html")
 
+INSECURE_PORT = os.environ.get("INSECURE_PORT")
 SECURE_PORT = os.environ.get("SECURE_PORT")
 
 # all certificates are passed in as environment variables
@@ -93,7 +94,7 @@ application = Application("static-server")
 
 plainSite = Site(RedirectResource())
 plainSite.displayTracebacks = False
-plainService6 = TCPServer(80, plainSite, interface='::')
+plainService6 = TCPServer(INSECURE_PORT, plainSite, interface='::')
 plainService6.setServiceParent(application)
 
 files = File(DOCUMENTS.path)

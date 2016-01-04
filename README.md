@@ -2,7 +2,10 @@
 
 Static server that uses HSTS by default.
 
-## how to install and run
-0. copy all of the data files you would like to serve into `calrissian/public`
-1. `pip install -r requirements.txt`
-2. `twistd -ny calrissian/server.py3.
+## building and running
+1. copy static files into calrissian/public
+2. make sure docker is running/works
+3. run `./build.sh`
+
+## dev certs
+All of the certificates in `dev_certs` are for testing only.
