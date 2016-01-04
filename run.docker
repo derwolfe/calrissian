@@ -1,0 +1,11 @@
+FROM calrissian-base
+
+ADD wheelhouse /wheelhouse
+RUN . /appenv/bin/activate; \
+    pip install --no-index -f wheelhouse calrissian
+
+EXPOSE 8081
+EXPOSE 8080
+
+ENTRYPOINT . /appenv/bin/activate; \
+           twistd -ny calrissian/server.py

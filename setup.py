@@ -9,6 +9,11 @@ setup(
     zip_safe=True,
     packages=["calrissian"],
     include_package_data=True,
+    install_requires=[
+        "twisted>=15.5.0",
+        "pem",
+        "service_identity"
+    ],
     package_data={
         "public": ["calrissian/public/*."],
     }
